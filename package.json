@@ -1,7 +1,7 @@
 {
     "author": "David P. Janes <davidjanes@iotdb.org> (https://iotdb.org)", 
     "bugs": {
-        "url": "https://github.com/dpjanes/iotdb-metadata/issues"
+        "url": "https://github.com/dpjanes/iotdb-metadata-fs/issues"
     }, 
     "dependencies": {
     }, 
@@ -24,11 +24,11 @@
     "homestar": {}, 
     "license": "Apache-2.0", 
     "main": "index.js", 
-    "name": "iotdb-metadata", 
+    "name": "iotdb-metadata-fs", 
     "private": false, 
     "repository": {
         "type": "git", 
-        "url": "https://github.com/dpjanes/iotdb-metadata"
+        "url": "https://github.com/dpjanes/iotdb-metadata-fs"
     }, 
     "scripts": {
         "test": "grunt"

@@ -6,7 +6,7 @@
 #   2015-10-11
 #
 
-PACKAGE=iotdb-metadata
+PACKAGE=iotdb-metadata-fs
 DIST_ROOT=/var/tmp/.dist.$$
 
 if [ ! -d "$DIST_ROOT" ]

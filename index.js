@@ -28,7 +28,7 @@ var _ = iotdb.helpers;
 var FSTransport = require('iotdb-transport-fs').Transport;
 
 var logger = iotdb.logger({
-    name: 'iotdb-metadata',
+    name: 'iotdb-metadata-fs',
     module: 'persist',
 });
 
