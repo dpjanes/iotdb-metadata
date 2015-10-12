@@ -26,12 +26,12 @@ var iotdb = require('iotdb');
 var _ = iotdb.helpers;
 
 var FSTransport = require('iotdb-transport-fs').Transport;
+var IOTDBTransport = require('iotdb-transport-iotdb').Transport;
 
 var logger = iotdb.logger({
     name: 'iotdb-metadata-fs',
-    module: 'persist',
+    module: 'index',
 });
-
 
 /**
  *  This is automatically called by IOTDB 
@@ -47,6 +47,18 @@ var setup = function() {
         prefix: ".iotdb/things",
         user: iotdb.users.owner(),
     });
+
+    var iotdb_transporter = new IOTDBTransport({
+        user: iotdb.users.owner(),
+        /*
+        authorize: function (authd, callback) {
+            authd = _.defaults({}, authd);
+            authd.store = "things";
+
+            iotdb.users.authorize(authd, callback);
+        },
+        */
+    }, iotdb.iot().things());
 
     // When things are changed, save their metata
     iotdb_transporter.updated(function (ud) {
@@ -67,18 +79,18 @@ var setup = function() {
 
     // When things are discovered, load their metadata from the FS
     var _back_copy = function (ld) {
-        if (ld.end) {
+        if (!ld.id) {
             return;
-        } else if (ld.id) {
-            metadata_transporter.get({
-                id: ld.id,
-                band: "meta",
-            }, function (gd) {
-                if (gd.value) {
-                    iotdb_transporter.update(gd);
-                }
-            });
         }
+
+        metadata_transporter.get({
+            id: ld.id,
+            band: "meta",
+        }, function (gd) {
+            if (gd.value) {
+                iotdb_transporter.update(gd);
+            }
+        });
     };
 
     iotdb_transporter.added(_back_copy);
@@ -88,4 +100,4 @@ var setup = function() {
 /**
  *  API
  */
-exports.API = setup
+exports.setup = setup

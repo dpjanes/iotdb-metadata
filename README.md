@@ -5,9 +5,6 @@ Metadata store for IOTDB
 
 # Installation
 
-NOTE that this is automatically installed by HomeStar, so it's very
-unlikely you'll need to independently install it
-
 Install Home☆Star first. 
 See: https://github.com/dpjanes/iotdb-homestar#installation
 
