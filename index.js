@@ -22,3 +22,70 @@
 
 "use strict";
 
+var iotdb = require('iotdb');
+var _ = iotdb.helpers;
+
+var FSTransport = require('iotdb-transport-fs').Transport;
+
+var logger = iotdb.logger({
+    name: 'iotdb-metadata',
+    module: 'persist',
+});
+
+
+/**
+ *  This is automatically called by IOTDB 
+ *  if installed using 'homestar install'.
+ *
+ *  Basically, this module:
+ *  - loads metadata and startup
+ *  - loads metadata when things are created
+ *  - saves metadata when it is changed
+ */
+var setup = function() {
+    var metadata_transporter = new FSTransport({
+        prefix: ".iotdb/things",
+        user: iotdb.users.owner(),
+    });
+
+    // When things are changed, save their metata
+    iotdb_transporter.updated(function (ud) {
+        if (ud.band !== "meta") {
+            return;
+        }
+
+        ud = _.shallowCopy(ud);
+        ud.value = _.shallowCopy(ud.value);
+
+        delete ud.value["iot:controller.session-timestamp"];
+        delete ud.value["iot:controller.machine-id"];
+        delete ud.value["iot:thing"];
+        delete ud.value["iot:reachable"];
+
+        metadata_transporter.update(ud);
+    });
+
+    // When things are discovered, load their metadata from the FS
+    var _back_copy = function (ld) {
+        if (ld.end) {
+            return;
+        } else if (ld.id) {
+            metadata_transporter.get({
+                id: ld.id,
+                band: "meta",
+            }, function (gd) {
+                if (gd.value) {
+                    iotdb_transporter.update(gd);
+                }
+            });
+        }
+    };
+
+    iotdb_transporter.added(_back_copy);
+    iotdb_transporter.list(_back_copy);
+};
+
+/**
+ *  API
+ */
+exports.API = setup
