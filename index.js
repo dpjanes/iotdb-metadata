@@ -61,7 +61,7 @@ var setup = function() {
     }, iotdb.iot().things());
 
     // When things are changed, save their metata
-    iotdb_transporter.updated(function (ud) {
+    iotdb_transporter.updated({}, function (ud) {
         if (ud.band !== "meta") {
             return;
         }
@@ -74,7 +74,7 @@ var setup = function() {
         delete ud.value["iot:thing"];
         delete ud.value["iot:reachable"];
 
-        metadata_transporter.update(ud);
+        metadata_transporter.put(ud, _.noop);
     });
 
     // When things are discovered, load their metadata from the FS
@@ -88,7 +88,7 @@ var setup = function() {
             band: "meta",
         }, function (gd) {
             if (gd.value) {
-                iotdb_transporter.update(gd);
+                iotdb_transporter.put(gd, _.noop);
             }
         });
     };
