@@ -61,10 +61,13 @@ var setup = function() {
     }, iotdb.iot().things());
 
     // When things are changed, save their metata
-    iotdb_transporter.updated({}, function (ud) {
+    iotdb_transporter.updated({}, function (error, ud) {
         if (ud.band !== "meta") {
             return;
         }
+
+// DPJ JAN30 REMOVE ME
+return;
 
         ud = _.shallowCopy(ud);
         ud.value = _.shallowCopy(ud.value);
@@ -78,23 +81,26 @@ var setup = function() {
     });
 
     // When things are discovered, load their metadata from the FS
-    var _back_copy = function (ld) {
-        if (!ld.id) {
+    var _back_copy = function (error, ld) {
+        if (error) {
+            return;
+        }
+        if (!ld) {
             return;
         }
 
         metadata_transporter.get({
             id: ld.id,
             band: "meta",
-        }, function (gd) {
-            if (gd.value) {
+        }, function (error, gd) {
+            if (!error && gd.value) {
                 iotdb_transporter.put(gd, _.noop);
             }
         });
     };
 
-    iotdb_transporter.added(_back_copy);
-    iotdb_transporter.list(_back_copy);
+    iotdb_transporter.added({}, _back_copy);
+    iotdb_transporter.list({}, _back_copy);
 };
 
 /**
