@@ -4,7 +4,7 @@
         "url": "https://github.com/dpjanes/iotdb-metadata-fs/issues"
     }, 
     "dependencies": {
-        "iotdb": ">=0.12.0"
+        "iotdb": ">=0.13.0"
     }, 
     "description": "HomeStar / IOTDB Bridge for THEPACKAGE", 
     "devDependencies": {
@@ -31,5 +31,5 @@
     "scripts": {
         "test": "grunt"
     }, 
-    "version": "0.0.3"
+    "version": "0.0.4"
 }
