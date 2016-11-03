@@ -23,7 +23,7 @@
 "use strict";
 
 var iotdb = require('iotdb');
-var _ = iotdb.helpers;
+var _ = iotdb._;
 
 var FSTransport = require('iotdb-transport-fs').Transport;
 var IOTDBTransport = require('iotdb-transport-iotdb').Transport;
@@ -65,9 +65,6 @@ var setup = function() {
         if (ud.band !== "meta") {
             return;
         }
-
-// DPJ JAN30 REMOVE ME
-return;
 
         ud = _.d.clone.shallow(ud);
         ud.value = _.d.clone.shallow(ud.value);
